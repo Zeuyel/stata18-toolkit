@@ -6,7 +6,7 @@ arch=('x86_64')
 url='https://public.econ.duke.edu/stata/installers/18/Stata18Linux64.tar.gz'
 license=('custom')
 depends=('python')
-makedepends=('bsdtar')
+makedepends=('libarchive')
 source=(
   'stata18-mp.sh'
   'xstata18-mp.sh'
