@@ -1,6 +1,6 @@
 challenge_id: "stata18-toolkit"
 objective: "Analyze the supplied stata-themed challenge artifact to locate the local flag/validation path without treating it as a real Stata license target."
-current_stage: "delivery artifacts prepared; GitHub Actions release workflow added"
+current_stage: "delivery tree published to GitHub; GitHub Release CI ready for first workflow_dispatch"
 completed:
   - "Isolated original ZIP and extracted its contents into a dedicated workdir."
   - "Computed hashes for original and extracted ZIP artifacts."
@@ -46,13 +46,13 @@ completed:
   - "Prepared final delivery tree under delivery/ with versioned license builder, Arch packaging sources, and built package artifact."
   - "Validated the staged Stata 18 package artifact at delivery/archpkg/stata18-runtime/stata18-runtime-18.0.0-1-x86_64.pkg.tar.zst."
   - "Added repository-facing GitHub Actions release workflow and Arch-container build script."
+  - "Published the source-controlled delivery tree to https://github.com/Zeuyel/stata18-toolkit on branch main."
 blockers:
   - "No gdb/strace/ltrace tooling currently available in PATH for easier dynamic tracing."
   - "Browser-driven acquisition path via jshook/RoxyBrowser was unstable; package was acquired manually instead."
   - "No challenge-specific or flag-like text has appeared yet in the mapped stock BE/SE/MP license-display matrices."
   - "Further GUI-focused validation still depends on a usable graphical session and inspection of GUI-only dialogs rather than additional dependency staging."
 next_actions:
-  - "Create the GitHub repositories and push only the source-controlled packaging tree."
   - "Run the new release workflow once by workflow_dispatch before relying on tag-driven releases."
 
   - "Use the static workbench to iterate through alternative field families and export candidate licenses quickly, then test them against the local install."
@@ -95,4 +95,5 @@ evidence_refs:
   - ".github/workflows/release.yml"
   - "scripts/ci/build-release.sh"
   - ".gitignore"
-last_updated: "2026-04-03T17:05:00+08:00"
+  - "https://github.com/Zeuyel/stata18-toolkit"
+last_updated: "2026-04-03T18:13:24+08:00"
