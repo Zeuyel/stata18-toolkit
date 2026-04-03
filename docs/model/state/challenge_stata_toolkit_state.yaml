@@ -1,6 +1,6 @@
 challenge_id: "stata18-toolkit"
 objective: "Analyze the supplied stata-themed challenge artifact to locate the local flag/validation path without treating it as a real Stata license target."
-current_stage: "delivery tree published to GitHub; GitHub Release CI ready for first workflow_dispatch"
+current_stage: "workflow_dispatch validated successfully; draft release assets published on GitHub"
 completed:
   - "Isolated original ZIP and extracted its contents into a dedicated workdir."
   - "Computed hashes for original and extracted ZIP artifacts."
@@ -53,7 +53,6 @@ blockers:
   - "No challenge-specific or flag-like text has appeared yet in the mapped stock BE/SE/MP license-display matrices."
   - "Further GUI-focused validation still depends on a usable graphical session and inspection of GUI-only dialogs rather than additional dependency staging."
 next_actions:
-  - "Run the new release workflow once by workflow_dispatch before relying on tag-driven releases."
 
   - "Use the static workbench to iterate through alternative field families and export candidate licenses quickly, then test them against the local install."
   - "Extend the search beyond the mapped stock BE/SE/MP matrices and look for challenge-specific display behavior in other binaries, other field families, or GUI-only paths."
@@ -96,4 +95,5 @@ evidence_refs:
   - "scripts/ci/build-release.sh"
   - ".gitignore"
   - "https://github.com/Zeuyel/stata18-toolkit"
-last_updated: "2026-04-03T18:13:24+08:00"
+  - "https://github.com/Zeuyel/stata18-toolkit/releases/tag/untagged-2e2186c5a7e3c02c3858"
+last_updated: "2026-04-03T19:47:14+08:00"
