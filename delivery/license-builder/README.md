@@ -1,12 +1,18 @@
 # Stata 18 License Builder
 
-入口：`stata18-license-builder.py`
+主入口：`stata18-license-builder.sh`
+
+特性：
+- 无参数运行时进入交互式 shell 提示流程
+- 保留 `--preset` / `--output` / `--format` 等非交互参数，方便 CI 或脚本调用
+- 运行时不依赖 Python
 
 示例：
 
 ```bash
-python3 stata18-license-builder.py --preset mp32
-python3 stata18-license-builder.py --preset be --output ~/.config/stata18-runtime/stata.lic
+./stata18-license-builder.sh
+./stata18-license-builder.sh --non-interactive --preset mp32 --output ~/.config/stata18-runtime/stata.lic
+./stata18-license-builder.sh --non-interactive --preset be --format license-only
 ```
 
 已验证工作族默认值：

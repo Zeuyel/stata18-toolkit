@@ -38,6 +38,22 @@ extract_pkg_usr_lib_tree() {
   rm -rf "$tmp_dir"
 }
 
+copy_pkg_usr_lib_tree() {
+  local pkg="$1"
+  local dest_root="$2"
+  install -d "$dest_root"
+  while IFS= read -r path; do
+    [[ "$path" == /usr/lib/* ]] || continue
+    local rel=${path#/usr/lib/}
+    if [[ -d "$path" ]]; then
+      install -d "$dest_root/$rel"
+    elif [[ -L "$path" || -f "$path" ]]; then
+      install -d "$dest_root/$(dirname "$rel")"
+      cp -a "$path" "$dest_root/$rel"
+    fi
+  done < <(pacman -Qlq "$pkg" | sort -u)
+}
+
 rm -rf "$dist_dir" "$stage_root" "$ci_root/work"
 install -d "$(dirname "$media_path")" "$dist_dir" "$stage_root/gtk2/usr/lib" "$stage_root/ncurses5/usr/lib" "$ci_root/work"
 
@@ -54,23 +70,8 @@ printf '%s  %s\n' "$upstream_sha256" "$media_path" | sha256sum -c -
 gtk2_pkg="$ci_root/work/gtk2.pkg.tar.zst"
 download_latest_archive_pkg gtk2 "$gtk2_pkg"
 extract_pkg_usr_lib_tree "$gtk2_pkg" "$stage_root/gtk2/usr/lib"
-copy_pkg_usr_lib_tree() {
-  local pkg="$1"
-  local dest_root="$2"
-  install -d "$dest_root"
-  while IFS= read -r path; do
-    [[ "$path" == /usr/lib/* ]] || continue
-    local rel=${path#/usr/lib/}
-    if [[ -d "$path" ]]; then
-      install -d "$dest_root/$rel"
-    elif [[ -L "$path" || -f "$path" ]]; then
-      install -d "$dest_root/$(dirname "$rel")"
-      cp -a "$path" "$dest_root/$rel"
-    fi
-  done < <(pacman -Qlq "$pkg" | sort -u)
-}
 copy_pkg_usr_lib_tree ncurses5-compat-libs "$stage_root/ncurses5/usr/lib"
-install -m755 "$repo_root/delivery/license-builder/stata18-license-builder.py" "$pkg_dir/stata18-license-builder.py"
+install -m755 "$repo_root/delivery/license-builder/stata18-license-builder.sh" "$pkg_dir/stata18-license-builder.sh"
 
 (
   cd "$pkg_dir"
@@ -83,7 +84,7 @@ install -m755 "$repo_root/delivery/license-builder/stata18-license-builder.py" "
   makepkg -Cfs --noconfirm
 )
 
-cp "$repo_root/delivery/license-builder/stata18-license-builder.py" "$dist_dir/"
+cp "$repo_root/delivery/license-builder/stata18-license-builder.sh" "$dist_dir/"
 cat > "$dist_dir/BUILD-INFO.txt" <<EOF2
 package=stata18-runtime
 source_url=$upstream_url
@@ -100,7 +101,7 @@ cat > "$dist_dir/RELEASE_NOTES.md" <<EOF2
 ## Release Assets
 
 - Built Arch package \`.pkg.tar.zst\`
-- Versioned license builder \`stata18-license-builder.py\`
+- Versioned shell license builder \`stata18-license-builder.sh\`
 - \`SHA256SUMS.txt\` and \`BUILD-INFO.txt\`
 EOF2
 (

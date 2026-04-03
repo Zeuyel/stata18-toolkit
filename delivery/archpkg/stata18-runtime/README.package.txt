@@ -3,7 +3,7 @@ Stata 18 runtime package
 Installed layout:
 - /opt/stata18-runtime/runtime.template
 - /opt/stata18-runtime/lib
-- /opt/stata18-runtime/tools/stata18-license-builder.py
+- /opt/stata18-runtime/tools/stata18-license-builder.sh
 
 User entry points:
 - stata18-mp

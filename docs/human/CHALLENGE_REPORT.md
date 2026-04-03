@@ -478,7 +478,7 @@ This gives a low-friction way to explore license variations visually before drop
 
 Final operator-facing outputs for the Stata 18 branch now live under `delivery/`:
 
-- `delivery/license-builder/stata18-license-builder.py`
+- `delivery/license-builder/stata18-license-builder.sh`
   - standalone versioned builder for installer-style `Serial number` / `Code` / `Authorization` generation
 - `delivery/archpkg/stata18-runtime/PKGBUILD`
   - Arch packaging recipe for a self-contained runtime install under `/opt/stata18-runtime`

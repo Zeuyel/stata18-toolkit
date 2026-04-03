@@ -1,23 +1,22 @@
 pkgname=stata18-runtime
 pkgver=18.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Packaged Stata 18 runtime with bundled license builder and self-managed per-user workspace'
 arch=('x86_64')
 url='https://public.econ.duke.edu/stata/installers/18/Stata18Linux64.tar.gz'
 license=('custom')
-depends=('python')
+depends=()
 makedepends=('libarchive')
 source=(
   'stata18-mp.sh'
   'xstata18-mp.sh'
   'stata18-license-builder.sh'
-  'stata18-license-builder.py'
   'stata18-config.env.sample'
   'stata18-mp.desktop'
   'mojave.gtkrc'
   'README.package.txt'
 )
-sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 _challenge_root=${CHALLENGE_ROOT:-$(cd "$startdir/../../.." && pwd)}
 _gtk2_lib_root=${GTK2_LIB_ROOT:-$_challenge_root/runtime/localdeps/gtk2/usr/lib}
@@ -46,7 +45,7 @@ package() {
   cp -a --no-preserve=ownership "$_gtk2_lib_root/." "$pkgdir/opt/stata18-runtime/lib/gtk2/"
 
   install -d "$pkgdir/opt/stata18-runtime/tools" "$pkgdir/opt/stata18-runtime/share/themes" "$pkgdir/opt/stata18-runtime/share/icons"
-  install -m755 "$srcdir/stata18-license-builder.py" "$pkgdir/opt/stata18-runtime/tools/stata18-license-builder.py"
+  install -m755 "$srcdir/stata18-license-builder.sh" "$pkgdir/opt/stata18-runtime/tools/stata18-license-builder.sh"
   install -m644 "$srcdir/stata18-config.env.sample" "$pkgdir/opt/stata18-runtime/share/config.env.sample"
   install -m644 "$srcdir/mojave.gtkrc" "$pkgdir/opt/stata18-runtime/share/themes/mojave.gtkrc"
   install -m644 "$srcdir/README.package.txt" "$pkgdir/opt/stata18-runtime/README.txt"

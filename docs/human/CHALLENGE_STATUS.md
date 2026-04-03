@@ -114,7 +114,7 @@ Primary reference:
 
 - 最终交付物已经落在 `delivery/`，而不是 `~/.local/opt/stata-mp` 这类本地验证目录。
 - 交付结构固定为：
-  - `delivery/license-builder/stata18-license-builder.py`
+  - `delivery/license-builder/stata18-license-builder.sh`
   - `delivery/archpkg/stata18-runtime/PKGBUILD`
   - `delivery/archpkg/stata18-runtime/stata18-runtime-18.0.0-1-x86_64.pkg.tar.zst`
 - 本地安装只用于验证运行路径、依赖内置和 wrapper 行为，不作为最终交付产物。
@@ -140,3 +140,9 @@ Primary reference:
 - Draft Release 已生成：`stata18-runtime-v18.0.0-1`
 - Release 页面：`https://github.com/Zeuyel/stata18-toolkit/releases/tag/untagged-2e2186c5a7e3c02c3858`
 - 当前已确认资产包含 builder、`SHA256SUMS.txt`、`BUILD-INFO.txt`、主 `.pkg.tar.zst`；同时还产出了一个 `-debug` 包。
+
+## 2026-04-03 Shell Builder Refresh
+
+- `delivery/license-builder/stata18-license-builder.sh` 现在是主入口；无参数时进入交互式 shell 提示流程。
+- `delivery/archpkg/stata18-runtime/stata18-license-builder.sh` 已从 Python wrapper 改成纯 shell 实现，运行时不再因为 builder 需要 `python` 依赖。
+- `.github/workflows/release.yml` 和 `scripts/ci/build-release.sh` 现在发布 `.sh` builder 资产，并移除了仅为 builder 引入的 Python 安装步骤。
