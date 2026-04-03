@@ -1,0 +1,18 @@
+# Local reverse-engineering outputs
+artifacts/original/
+artifacts/linuxpkg/
+artifacts/media/
+artifacts/binfocus/
+artifacts/extracted/
+artifacts/runtime_install.log
+runtime/
+
+# Local and CI build outputs
+.ci/
+dist/
+delivery/archpkg/stata18-runtime/*.pkg.tar.zst
+
+tools/__pycache__/
+*.pyc
+artifacts/runtime_probe/
+tools/call_license_fn

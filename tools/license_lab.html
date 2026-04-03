@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stata 19 License Builder</title>
+    <style>
+      :root {
+        --bg: #f4eddf;
+        --paper: rgba(255, 251, 244, 0.92);
+        --panel: rgba(255, 255, 255, 0.78);
+        --ink: #1f1a16;
+        --muted: #665d53;
+        --line: rgba(31, 26, 22, 0.12);
+        --teal: #0e6a68;
+        --teal-soft: rgba(14, 106, 104, 0.1);
+        --gold: #b5822e;
+        --gold-soft: rgba(181, 130, 46, 0.14);
+        --brick: #ab5437;
+        --brick-soft: rgba(171, 84, 55, 0.14);
+        --green: #2e7244;
+        --green-soft: rgba(46, 114, 68, 0.12);
+        --shadow: 0 24px 80px rgba(60, 38, 10, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        font-family: "IBM Plex Sans", "Noto Sans SC", sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(14, 106, 104, 0.14), transparent 24%),
+          radial-gradient(circle at 86% 14%, rgba(181, 130, 46, 0.18), transparent 20%),
+          linear-gradient(180deg, #fbf6ec 0%, var(--bg) 100%);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.2;
+        background-image:
+          linear-gradient(rgba(31, 26, 22, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(31, 26, 22, 0.05) 1px, transparent 1px);
+        background-size: 26px 26px;
+        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent 92%);
+      }
+
+      .page {
+        width: min(1240px, calc(100vw - 28px));
+        margin: 18px auto;
+        padding: 24px;
+        border-radius: 34px;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(14px);
+      }
+
+      .hero,
+      .layout {
+        display: grid;
+        gap: 20px;
+      }
+
+      .hero {
+        grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+        align-items: stretch;
+      }
+
+      .layout {
+        margin-top: 22px;
+        grid-template-columns: minmax(360px, 480px) minmax(0, 1fr);
+      }
+
+      .card,
+      .panel,
+      .status-box,
+      .output-box,
+      .usage-box {
+        position: relative;
+        overflow: hidden;
+        padding: 20px;
+        border-radius: 26px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+      }
+
+      .card::after,
+      .panel::after,
+      .status-box::after,
+      .output-box::after,
+      .usage-box::after {
+        content: "";
+        position: absolute;
+        right: -36px;
+        bottom: -36px;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(14, 106, 104, 0.08), transparent 72%);
+        pointer-events: none;
+      }
+
+      .eyebrow,
+      .out-label {
+        margin: 0 0 10px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--teal);
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        font-family: "Space Grotesk", "IBM Plex Sans", sans-serif;
+        letter-spacing: -0.04em;
+      }
+
+      h1 {
+        font-size: clamp(38px, 7vw, 68px);
+        line-height: 0.95;
+        max-width: 12ch;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      .lede,
+      .subtle,
+      .note {
+        color: var(--muted);
+        line-height: 1.68;
+      }
+
+      .lede {
+        margin: 16px 0 0;
+        max-width: 60ch;
+      }
+
+      .hero-tags,
+      .preset-row,
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .hero-tags {
+        margin-top: 18px;
+      }
+
+      .tag,
+      .status-pill,
+      .preset-row button,
+      .button-row button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0 16px;
+        border-radius: 999px;
+        font: inherit;
+        font-weight: 700;
+      }
+
+      .tag {
+        border: 1px solid rgba(14, 106, 104, 0.12);
+        background: rgba(255, 255, 255, 0.72);
+        color: #214244;
+      }
+
+      .hero-preview {
+        margin-top: 10px;
+        font-size: clamp(24px, 4vw, 34px);
+        line-height: 1.06;
+      }
+
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .stat {
+        padding: 14px;
+        border-radius: 18px;
+        border: 1px solid rgba(14, 106, 104, 0.12);
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .stat span {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .stat strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 19px;
+        line-height: 1.2;
+      }
+
+      .stack {
+        display: grid;
+        gap: 16px;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .section-head p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .preset-row button,
+      .button-row button {
+        appearance: none;
+        border: 0;
+        cursor: pointer;
+        transition: transform 140ms ease, box-shadow 140ms ease;
+      }
+
+      .preset-row button:hover,
+      .button-row button:hover {
+        transform: translateY(-1px);
+      }
+
+      .preset-main,
+      .button-main {
+        color: #f8fffe;
+        background: linear-gradient(135deg, #0e6a68, #145f75);
+        box-shadow: 0 12px 28px rgba(14, 106, 104, 0.18);
+      }
+
+      .preset-alt,
+      .button-alt {
+        color: #173f45;
+        background: var(--teal-soft);
+      }
+
+      .preset-warm,
+      .button-warm {
+        color: #7a391d;
+        background: var(--brick-soft);
+      }
+
+      .field-grid,
+      .triple-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .field-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .triple-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .full {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        display: grid;
+        gap: 7px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .help {
+        margin: -1px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.58;
+        font-weight: 400;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 16px;
+        border: 1px solid rgba(31, 26, 22, 0.14);
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--ink);
+        font: inherit;
+        outline: none;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: rgba(14, 106, 104, 0.42);
+        box-shadow: 0 0 0 4px rgba(14, 106, 104, 0.08);
+      }
+
+      textarea {
+        min-height: 220px;
+        resize: vertical;
+      }
+
+      .mono,
+      code,
+      textarea {
+        font-family: "Iosevka Term", "JetBrains Mono", monospace;
+      }
+
+      .readonly {
+        background: rgba(247, 252, 251, 0.96);
+      }
+
+      .status-pill {
+        margin-bottom: 10px;
+      }
+
+      .status-pill[data-tone="good"] {
+        color: #1e5d37;
+        background: var(--green-soft);
+        border: 1px solid rgba(46, 114, 68, 0.16);
+      }
+
+      .status-pill[data-tone="warn"] {
+        color: #7d5716;
+        background: var(--gold-soft);
+        border: 1px solid rgba(181, 130, 46, 0.18);
+      }
+
+      .status-pill[data-tone="bad"] {
+        color: #7a3217;
+        background: var(--brick-soft);
+        border: 1px solid rgba(171, 84, 55, 0.18);
+      }
+
+      .status-box ul,
+      .usage-box ol,
+      .usage-box ul {
+        margin: 0;
+        padding-left: 20px;
+      }
+
+      .status-box li,
+      .usage-box li {
+        line-height: 1.66;
+      }
+
+      .path {
+        display: block;
+        margin-top: 12px;
+        padding: 12px 14px;
+        border-radius: 16px;
+        border: 1px solid rgba(14, 106, 104, 0.12);
+        background: rgba(14, 106, 104, 0.08);
+        color: #1d4347;
+        word-break: break-all;
+      }
+
+      @media (max-width: 980px) {
+        .hero,
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .triple-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page {
+          width: min(100vw, calc(100vw - 10px));
+          margin: 5px auto;
+          padding: 12px;
+          border-radius: 20px;
+        }
+
+        .card,
+        .panel,
+        .status-box,
+        .output-box,
+        .usage-box {
+          padding: 16px;
+          border-radius: 18px;
+        }
+
+        .field-grid,
+        .hero-stats {
+          grid-template-columns: 1fr;
+        }
+
+        h1 {
+          max-width: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <section class="card">
+          <p class="eyebrow">Static HTML · Local Only</p>
+          <h1>Stata 19 License Builder</h1>
+          <p class="lede">
+            这个页面已经切到 <strong>Stata 19</strong> 默认规则。
+            你只需要填参数，就会得到安装器需要的
+            <code>Serial number</code>、<code>Code</code>、<code>Authorization</code>
+            以及最终的 <code>stata.lic</code>。
+          </p>
+          <div class="hero-tags">
+            <span class="tag">默认预设 MP 64-core</span>
+            <span class="tag">默认日期 01012050</span>
+            <span class="tag">单文件离线使用</span>
+          </div>
+        </section>
+
+        <section class="card">
+          <p class="eyebrow">Current Preview</p>
+          <h2 class="hero-preview" id="license-preview">Unlimited-student 64-core lab, expiring 1 Jan 2050</h2>
+          <div class="hero-stats">
+            <div class="stat">
+              <span>推荐核心数</span>
+              <strong>64</strong>
+            </div>
+            <div class="stat">
+              <span>日期要求</span>
+              <strong>field6 必填</strong>
+            </div>
+            <div class="stat">
+              <span>稳定上限</span>
+              <strong>2050</strong>
+            </div>
+            <div class="stat">
+              <span>输出</span>
+              <strong>stata.lic</strong>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="layout">
+        <section class="stack">
+          <section class="panel">
+            <div class="section-head">
+              <div>
+                <h2>参数输入</h2>
+                <p>默认值已经是当前本地验证通过的 `Stata 19 MP 64-core` 工作族。</p>
+              </div>
+            </div>
+
+            <div class="preset-row">
+              <button class="preset-main" type="button" data-preset="mp64">MP 64 Cores</button>
+              <button class="preset-alt" type="button" data-preset="mp32">MP 32 Cores</button>
+              <button class="preset-warm" type="button" data-preset="be">BE</button>
+            </div>
+
+            <form id="license-form" class="stack">
+              <div class="field-grid">
+                <label>
+                  Serial
+                  <input name="serial" type="text" spellcheck="false">
+                  <p class="help">序列号。程序会直接显示这一项。</p>
+                </label>
+
+                <label>
+                  field1
+                  <input name="field1" type="text" spellcheck="false">
+                  <p class="help">主类字段。当前已验证工作族使用 `999`。</p>
+                </label>
+
+                <label>
+                  field2
+                  <input name="field2" type="text" spellcheck="false">
+                  <p class="help">网络模式字段。当前工作族使用 `24`。</p>
+                </label>
+
+                <label>
+                  field3
+                  <input name="field3" type="text" spellcheck="false">
+                  <p class="help">版本族字段。当前推荐 `5`。</p>
+                </label>
+
+                <label>
+                  field4
+                  <input name="field4" type="text" spellcheck="false">
+                  <p class="help">席位标签。`9999` 会显示为 Unlimited。</p>
+                </label>
+
+                <label>
+                  field5
+                  <select name="field5">
+                    <option value="a">a</option>
+                    <option value="b">b</option>
+                    <option value="c">c</option>
+                    <option value="d">d</option>
+                    <option value="e">e</option>
+                    <option value="f">f</option>
+                    <option value="g">g</option>
+                    <option value="h">h</option>
+                  </select>
+                  <p class="help">通道类型。当前验证通过的是 `h`，会显示成 student lab。</p>
+                </label>
+
+                <label>
+                  field6
+                  <input name="field6" type="text" placeholder="MMDDYYYY" spellcheck="false">
+                  <p class="help">日期字段。Stata 19 不要留空，推荐 `01012050`。</p>
+                </label>
+
+                <label>
+                  field7
+                  <input name="field7" type="text" placeholder="blank for BE" spellcheck="false">
+                  <p class="help">MP 核心数。BE 留空；MP 推荐填 `64`。</p>
+                </label>
+
+                <label class="full">
+                  Licensed To Line 1
+                  <input name="line1" type="text" spellcheck="false">
+                  <p class="help">许可证显示的第一行。不要包含 `!`。</p>
+                </label>
+
+                <label class="full">
+                  Licensed To Line 2
+                  <input name="line2" type="text" spellcheck="false">
+                  <p class="help">许可证显示的第二行。不要包含 `!`。</p>
+                </label>
+              </div>
+
+              <div class="button-row">
+                <button id="generate-license" class="button-main" type="button">Generate stata.lic</button>
+                <button id="copy-license" class="button-alt" type="button">Copy</button>
+                <button id="download-license" class="button-warm" type="button">Download</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="status-box">
+            <p class="out-label">Validation</p>
+            <div class="status-pill" id="status-pill" data-tone="good">Ready for Stata 19</div>
+            <ul id="status-list"></ul>
+          </section>
+        </section>
+
+        <section class="stack">
+          <section class="output-box">
+            <p class="out-label">Installer Inputs</p>
+            <div class="triple-grid">
+              <label>
+                Serial number
+                <input id="serial-output" class="mono readonly" type="text" readonly>
+              </label>
+              <label>
+                Code
+                <input id="code-output" class="mono readonly" type="text" readonly>
+              </label>
+              <label>
+                Authorization
+                <input id="authorization-output" class="mono readonly" type="text" readonly>
+              </label>
+            </div>
+            <p class="note">
+              如果安装器弹出表单，就把这三项照填进去。
+            </p>
+          </section>
+
+          <section class="output-box">
+            <p class="out-label">Generated stata.lic</p>
+            <textarea id="license-output" class="mono" readonly></textarea>
+          </section>
+
+          <section class="usage-box">
+            <p class="out-label">How to Use</p>
+            <ol>
+              <li>填参数，或者直接点预设。</li>
+              <li>点击 <code>Generate stata.lic</code>。</li>
+              <li>如果程序要求输入安装参数，就填写上面的 <code>Serial number</code>、<code>Code</code>、<code>Authorization</code>。</li>
+              <li>如果程序直接读取许可证文件，就复制或下载下面生成的 <code>stata.lic</code>。</li>
+            </ol>
+
+            <p class="note"><strong>Linux:</strong> 当前本地安装的稳定入口路径是：</p>
+            <code class="path">~/.local/opt/stata-mp/runtime/stata.lic</code>
+
+            <ul>
+              <li><strong>Windows / macOS:</strong> 如果安装器或初始化窗口要求填表，优先直接填写上面的三项。</li>
+              <li>如果目标副本已经存在 <code>stata.lic</code>，也可以直接替换那份文件。</li>
+              <li>MP 用 <code>stata-mp</code> 或 <code>xstata-mp</code> 启动；BE 保持 <code>field7</code> 为空。</li>
+            </ul>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script>
+      (function (root) {
+        const ALPH = "0123456789abcdefghijklmnopqrstuvwxyz$";
+        const MOD = 37;
+        const SPLIT_PREFIX = 4;
+
+        function toDigits(text) {
+          const out = [];
+          for (const ch of text) {
+            if (ch >= "0" && ch <= "9") {
+              out.push(ch.charCodeAt(0) - 48);
+            } else if (ch >= "a" && ch <= "z") {
+              out.push(ch.charCodeAt(0) - 87);
+            } else if (ch >= "A" && ch <= "Z") {
+              out.push(ch.charCodeAt(0) - 55);
+            } else if (ch === "$") {
+              out.push(36);
+            } else {
+              throw new Error("unsupported character: " + ch);
+            }
+          }
+          return out;
+        }
+
+        function fromDigits(values) {
+          return values.map((value) => ALPH[value]).join("");
+        }
+
+        function encodePayload(payload) {
+          const prefix = toDigits(payload);
+          const y = prefix.concat([
+            prefix.reduce((sum, value) => (sum + value) % MOD, 0),
+            prefix.reduce((sum, value, index) => (index & 1 ? sum + value : sum) % MOD, 0),
+            prefix.reduce((sum, value, index) => (!(index & 1) ? sum + value : sum) % MOD, 0),
+          ]);
+
+          const partials = [];
+          let acc = 0;
+          for (const value of y) {
+            acc = (acc + value) % MOD;
+            partials.push(acc);
+          }
+
+          const encoded = new Array(y.length).fill(0);
+          encoded[encoded.length - 1] = partials[partials.length - 1];
+          for (let i = y.length - 2; i >= 0; i -= 1) {
+            encoded[i] = (partials[i] + encoded[i + 1]) % MOD;
+          }
+
+          return fromDigits(encoded);
+        }
+
+        function splitEncoded(encoded) {
+          return {
+            authorization: encoded.slice(0, SPLIT_PREFIX),
+            code: encoded.slice(SPLIT_PREFIX),
+          };
+        }
+
+        function utf8ByteSum(text) {
+          return Array.from(new TextEncoder().encode(text)).reduce((sum, value) => sum + value, 0);
+        }
+
+        function buildPayload(fields) {
+          const values = [
+            fields.serial,
+            fields.field1,
+            fields.field2,
+            fields.field3,
+            fields.field4,
+            fields.field5,
+            fields.field6,
+          ];
+
+          if (fields.field7 !== "") {
+            values.push(fields.field7);
+          }
+
+          return values.join("$");
+        }
+
+        function buildLicenseBundle(serial, payload, line1, line2) {
+          const encoded = encodePayload(payload);
+          const parts = splitEncoded(encoded);
+          const checksum = utf8ByteSum(line1) + utf8ByteSum(line2);
+
+          return {
+            serial,
+            code: parts.code,
+            authorization: parts.authorization,
+            checksum,
+            licenseText: serial + "!" + parts.code + "!" + parts.authorization + "!" + line1 + "!" + line2 + "!" + checksum + "!",
+          };
+        }
+
+        function serialBlacklisted(serial) {
+          if (serial.length === 8) {
+            return serial === "10699393" || serial === "18461036";
+          }
+          if (serial.length === 11) {
+            return serial === "66610930394";
+          }
+          if (serial.length === 12) {
+            return (
+              serial === "301709301764" ||
+              serial === "401506209949" ||
+              serial === "501609127264" ||
+              serial === "501609129301" ||
+              serial === "501709301094"
+            );
+          }
+          return false;
+        }
+
+        function seatLabel(field4) {
+          const value = Number.parseInt(field4, 10);
+          if (Number.isNaN(value)) {
+            return "Custom";
+          }
+          if (value === 0 || value === 1) {
+            return "Single";
+          }
+          if (value === 9999) {
+            return "Unlimited";
+          }
+          return String(value) + "-user";
+        }
+
+        function channelTail(field5) {
+          const key = (field5 || "").slice(0, 1);
+          if (key === "g" || key === "h") {
+            return "student lab";
+          }
+          if (key === "c" || key === "d") {
+            return "network";
+          }
+          if (key === "e" || key === "f") {
+            return "compute server";
+          }
+          return "license";
+        }
+
+        function formatDateLabel(field6) {
+          if (!/^\d{8}$/.test(field6)) {
+            return field6 || "date missing";
+          }
+
+          const mm = field6.slice(0, 2);
+          const dd = field6.slice(2, 4);
+          const yyyy = field6.slice(4, 8);
+          const monthNames = {
+            "01": "Jan",
+            "02": "Feb",
+            "03": "Mar",
+            "04": "Apr",
+            "05": "May",
+            "06": "Jun",
+            "07": "Jul",
+            "08": "Aug",
+            "09": "Sep",
+            "10": "Oct",
+            "11": "Nov",
+            "12": "Dec",
+          };
+          const day = String(Number.parseInt(dd, 10) || dd);
+          return day + " " + (monthNames[mm] || mm) + " " + yyyy;
+        }
+
+        function summarize(fields) {
+          const parts = [seatLabel(fields.field4)];
+          if (fields.field5 === "g" || fields.field5 === "h") {
+            parts[0] += "-student";
+          }
+          if (fields.field7 !== "") {
+            parts.push(String(Number.parseInt(fields.field7, 10) || fields.field7) + "-core");
+          }
+          parts.push(channelTail(fields.field5));
+          parts.push("expiring " + formatDateLabel(fields.field6));
+          return parts.join(" ");
+        }
+
+        function validate(fields) {
+          const messages = [];
+          let tone = "good";
+
+          if (serialBlacklisted(fields.serial)) {
+            messages.push("这个 serial 命中了已知黑名单。");
+            tone = "bad";
+          }
+
+          if (fields.line1.includes("!") || fields.line2.includes("!")) {
+            messages.push("Licensed To 两行都不能包含 '!'.");
+            tone = "bad";
+          }
+
+          if (fields.field2 !== "24") {
+            messages.push("当前已验证工作族使用 field2 = 24。");
+            if (tone !== "bad") {
+              tone = "warn";
+            }
+          }
+
+          if (fields.field3 !== "2" && fields.field3 !== "5") {
+            messages.push("当前已知可用 field3 是 2 或 5，推荐保持 5。");
+            if (tone !== "bad") {
+              tone = "warn";
+            }
+          }
+
+          if (fields.field6 === "") {
+            messages.push("Stata 19 不要把 field6 留空。");
+            tone = "bad";
+          } else if (!/^\d{8}$/.test(fields.field6)) {
+            messages.push("field6 需要是 8 位数字，格式 MMDDYYYY。");
+            tone = "bad";
+          } else {
+            const year = Number.parseInt(fields.field6.slice(4, 8), 10);
+            if (year > 2050) {
+              messages.push("当前稳定上界是 2050；2051 及以后会失效。");
+              tone = "bad";
+            }
+          }
+
+          if (fields.field7 !== "") {
+            if (!/^\d+$/.test(fields.field7)) {
+              messages.push("field7 作为 MP 核心数时必须是十进制数字。");
+              tone = "bad";
+            } else {
+              const cores = Number.parseInt(fields.field7, 10);
+              if (cores < 2) {
+                messages.push("MP 的 field7 不能小于 2。");
+                tone = "bad";
+              } else if (cores > 64) {
+                messages.push("大于 64 的值会被运行时钳成 64-core，直接填 64 更稳。");
+                if (tone !== "bad") {
+                  tone = "warn";
+                }
+              }
+            }
+          }
+
+          if (messages.length === 0) {
+            messages.push("这组参数符合当前已验证的 Stata 19 工作族。");
+          }
+
+          return { tone, messages };
+        }
+
+        function attachUi() {
+          const form = document.querySelector("#license-form");
+          const preview = document.querySelector("#license-preview");
+          const statusPill = document.querySelector("#status-pill");
+          const statusList = document.querySelector("#status-list");
+          const serialOutput = document.querySelector("#serial-output");
+          const codeOutput = document.querySelector("#code-output");
+          const authorizationOutput = document.querySelector("#authorization-output");
+          const licenseOutput = document.querySelector("#license-output");
+          const copyButton = document.querySelector("#copy-license");
+
+          const basePreset = {
+            serial: "12345678",
+            field1: "999",
+            field2: "24",
+            field3: "5",
+            field4: "9999",
+            field5: "h",
+            field6: "01012050",
+            line1: "LocalLab",
+            line2: "LocalLab",
+          };
+
+          const presets = {
+            mp64: Object.assign({}, basePreset, { field7: "64" }),
+            mp32: Object.assign({}, basePreset, { field7: "32" }),
+            be: Object.assign({}, basePreset, { field7: "" }),
+          };
+
+          function getFields() {
+            const data = new FormData(form);
+            return {
+              serial: String(data.get("serial") || "").trim(),
+              field1: String(data.get("field1") || "").trim(),
+              field2: String(data.get("field2") || "").trim(),
+              field3: String(data.get("field3") || "").trim(),
+              field4: String(data.get("field4") || "").trim(),
+              field5: String(data.get("field5") || "").trim(),
+              field6: String(data.get("field6") || "").trim(),
+              field7: String(data.get("field7") || "").trim(),
+              line1: String(data.get("line1") || ""),
+              line2: String(data.get("line2") || ""),
+            };
+          }
+
+          function render() {
+            const fields = getFields();
+            const validation = validate(fields);
+
+            preview.textContent = summarize(fields);
+            statusPill.dataset.tone = validation.tone;
+            statusPill.textContent =
+              validation.tone === "good"
+                ? "Ready for Stata 19"
+                : validation.tone === "warn"
+                  ? "Usable, but tighten it first"
+                  : "Needs correction";
+            statusList.innerHTML = validation.messages.map((msg) => "<li>" + msg + "</li>").join("");
+
+            try {
+              const payload = buildPayload(fields);
+              const bundle = buildLicenseBundle(fields.serial, payload, fields.line1, fields.line2);
+              serialOutput.value = bundle.serial;
+              codeOutput.value = bundle.code;
+              authorizationOutput.value = bundle.authorization;
+              licenseOutput.value = bundle.licenseText;
+            } catch (error) {
+              serialOutput.value = "";
+              codeOutput.value = "";
+              authorizationOutput.value = "";
+              licenseOutput.value = "生成失败: " + error.message;
+              statusPill.dataset.tone = "bad";
+              statusPill.textContent = "Needs correction";
+            }
+          }
+
+          function applyPreset(name) {
+            const preset = presets[name];
+            for (const [key, value] of Object.entries(preset)) {
+              form.elements.namedItem(key).value = value;
+            }
+            render();
+          }
+
+          async function copyText(text) {
+            try {
+              await navigator.clipboard.writeText(text);
+            } catch (_error) {
+              licenseOutput.select();
+              document.execCommand("copy");
+            }
+          }
+
+          function downloadText(filename, text) {
+            const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+          }
+
+          document.querySelector("#generate-license").addEventListener("click", render);
+          document.querySelector("#copy-license").addEventListener("click", async function () {
+            await copyText(licenseOutput.value);
+            const oldText = copyButton.textContent;
+            copyButton.textContent = "Copied";
+            setTimeout(function () {
+              copyButton.textContent = oldText;
+            }, 900);
+          });
+          document.querySelector("#download-license").addEventListener("click", function () {
+            downloadText("stata.lic", licenseOutput.value);
+          });
+
+          form.addEventListener("input", render);
+
+          for (const button of document.querySelectorAll("[data-preset]")) {
+            button.addEventListener("click", function () {
+              applyPreset(button.dataset.preset);
+            });
+          }
+
+          applyPreset("mp64");
+        }
+
+        root.StataLicenseLab = {
+          encodePayload,
+          buildPayload,
+          buildLicenseBundle,
+          summarize,
+          validate,
+        };
+
+        if (typeof document !== "undefined") {
+          document.addEventListener("DOMContentLoaded", attachUi);
+        }
+      })(typeof globalThis !== "undefined" ? globalThis : this);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Stata 18 MP
+Name[zh_CN]=Stata 18 MP
+Comment=Launch packaged Stata 18 MP
+Comment[zh_CN]=启动打包后的 Stata 18 MP
+Exec=xstata18-mp
+TryExec=xstata18-mp
+Icon=/opt/stata18-runtime/share/icons/stata18.ico
+Terminal=false
+StartupNotify=true
+Categories=Science;
+Keywords=stata;license;ctf;

@@ -1,0 +1,61 @@
+pkgname=stata18-runtime
+pkgver=18.0.0
+pkgrel=1
+pkgdesc='Packaged Stata 18 runtime with bundled license builder and self-managed per-user workspace'
+arch=('x86_64')
+url='https://public.econ.duke.edu/stata/installers/18/Stata18Linux64.tar.gz'
+license=('custom')
+depends=('python')
+makedepends=('bsdtar')
+source=(
+  'stata18-mp.sh'
+  'xstata18-mp.sh'
+  'stata18-license-builder.sh'
+  'stata18-license-builder.py'
+  'stata18-config.env.sample'
+  'stata18-mp.desktop'
+  'mojave.gtkrc'
+  'README.package.txt'
+)
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+
+_challenge_root=${CHALLENGE_ROOT:-$(cd "$startdir/../../.." && pwd)}
+_gtk2_lib_root=${GTK2_LIB_ROOT:-$_challenge_root/runtime/localdeps/gtk2/usr/lib}
+_ncurses5_lib_root=${NCURSES5_LIB_ROOT:-$_challenge_root/runtime/localdeps/ncurses5/usr/lib}
+
+prepare() {
+  rm -rf "$srcdir/media" "$srcdir/runtime"
+  mkdir -p "$srcdir/media" "$srcdir/runtime"
+  bsdtar -xf "$_challenge_root/artifacts/original/Stata18Linux64.tar.gz" -C "$srcdir/media"
+  bsdtar -xf "$srcdir/media/unix/linux64/ado.taz" -C "$srcdir/runtime"
+  bsdtar -xf "$srcdir/media/unix/linux64/base.taz" -C "$srcdir/runtime"
+  bsdtar -xf "$srcdir/media/unix/linux64/bins.taz" -C "$srcdir/runtime"
+}
+
+package() {
+  [[ -d "$_ncurses5_lib_root" ]] || { echo "missing ncurses5 libs: $_ncurses5_lib_root" >&2; return 1; }
+  [[ -d "$_gtk2_lib_root" ]] || { echo "missing gtk2 libs: $_gtk2_lib_root" >&2; return 1; }
+
+  install -d "$pkgdir/opt/stata18-runtime/runtime.template"
+  cp -a --no-preserve=ownership "$srcdir/runtime/." "$pkgdir/opt/stata18-runtime/runtime.template/"
+
+  install -d "$pkgdir/opt/stata18-runtime/lib/ncurses5"
+  cp -a --no-preserve=ownership "$_ncurses5_lib_root/." "$pkgdir/opt/stata18-runtime/lib/ncurses5/"
+
+  install -d "$pkgdir/opt/stata18-runtime/lib/gtk2"
+  cp -a --no-preserve=ownership "$_gtk2_lib_root/." "$pkgdir/opt/stata18-runtime/lib/gtk2/"
+
+  install -d "$pkgdir/opt/stata18-runtime/tools" "$pkgdir/opt/stata18-runtime/share/themes" "$pkgdir/opt/stata18-runtime/share/icons"
+  install -m755 "$srcdir/stata18-license-builder.py" "$pkgdir/opt/stata18-runtime/tools/stata18-license-builder.py"
+  install -m644 "$srcdir/stata18-config.env.sample" "$pkgdir/opt/stata18-runtime/share/config.env.sample"
+  install -m644 "$srcdir/mojave.gtkrc" "$pkgdir/opt/stata18-runtime/share/themes/mojave.gtkrc"
+  install -m644 "$srcdir/README.package.txt" "$pkgdir/opt/stata18-runtime/README.txt"
+  install -m644 "$srcdir/media/stata18.ico" "$pkgdir/opt/stata18-runtime/share/icons/stata18.ico"
+
+  install -d "$pkgdir/usr/bin" "$pkgdir/usr/share/applications" "$pkgdir/usr/share/doc/$pkgname"
+  install -m755 "$srcdir/stata18-mp.sh" "$pkgdir/usr/bin/stata18-mp"
+  install -m755 "$srcdir/xstata18-mp.sh" "$pkgdir/usr/bin/xstata18-mp"
+  install -m755 "$srcdir/stata18-license-builder.sh" "$pkgdir/usr/bin/stata18-license-builder"
+  install -m644 "$srcdir/stata18-mp.desktop" "$pkgdir/usr/share/applications/stata18-mp.desktop"
+  install -m644 "$srcdir/media/license.pdf" "$pkgdir/usr/share/doc/$pkgname/license.pdf"
+}
