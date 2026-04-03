@@ -1,6 +1,6 @@
 challenge_id: "stata18-toolkit"
 objective: "Analyze the supplied stata-themed challenge artifact to locate the local flag/validation path without treating it as a real Stata license target."
-current_stage: "shell-native interactive builder staged in delivery, package, and release paths; awaiting refreshed release publication"
+current_stage: "shell-native interactive builder published on GitHub release tag stata18-runtime-v18.0.0-2"
 completed:
   - "Isolated original ZIP and extracted its contents into a dedicated workdir."
   - "Computed hashes for original and extracted ZIP artifacts."
@@ -48,6 +48,7 @@ completed:
   - "Added repository-facing GitHub Actions release workflow and Arch-container build script."
   - "Published the source-controlled delivery tree to https://github.com/Zeuyel/stata18-toolkit on branch main."
   - "Replaced the packaged license builder path with a pure Bash interactive shell script and removed the runtime Python dependency from the Arch package and release asset flow."
+  - "Validated the refreshed shell-native GitHub release run and confirmed tag stata18-runtime-v18.0.0-2 publishes the .sh builder plus updated -2 package assets."
 blockers:
   - "No gdb/strace/ltrace tooling currently available in PATH for easier dynamic tracing."
   - "Browser-driven acquisition path via jshook/RoxyBrowser was unstable; package was acquired manually instead."
@@ -55,7 +56,7 @@ blockers:
   - "Further GUI-focused validation still depends on a usable graphical session and inspection of GUI-only dialogs rather than additional dependency staging."
 next_actions:
 
-  - "Run workflow_dispatch again so GitHub Release publishes the shell-native .sh builder asset and refreshed package metadata."
+  - "Smoke-test the published -2 package on a clean Arch environment and optionally retire the older -1 release if it should no longer be used."
   - "Use the static workbench to iterate through alternative field families and export candidate licenses quickly, then test them against the local install."
   - "Extend the search beyond the mapped stock BE/SE/MP matrices and look for challenge-specific display behavior in other binaries, other field families, or GUI-only paths."
   - "If GUI behavior matters, run xstata-mp-local inside a real graphical session and inspect any GUI-only about/license dialogs for non-stock text."
@@ -99,4 +100,6 @@ evidence_refs:
   - ".gitignore"
   - "https://github.com/Zeuyel/stata18-toolkit"
   - "https://github.com/Zeuyel/stata18-toolkit/releases/tag/untagged-2e2186c5a7e3c02c3858"
-last_updated: "2026-04-03T20:53:03+08:00"
+  - "https://github.com/Zeuyel/stata18-toolkit/releases/tag/stata18-runtime-v18.0.0-2"
+  - "run:23947872803"
+last_updated: "2026-04-03T21:36:40+08:00"
